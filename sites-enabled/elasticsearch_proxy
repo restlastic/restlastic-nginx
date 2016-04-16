@@ -1,0 +1,16 @@
+server {
+
+  listen 80;
+  listen 9200;
+  server_name elasticsearch.restlastic.com;
+  access_log /var/log/nginx/elasticsearch_proxy.log;
+  charset utf-8;
+
+  location / {
+    proxy_pass http://elasticsearch:9200;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  }
+
+}

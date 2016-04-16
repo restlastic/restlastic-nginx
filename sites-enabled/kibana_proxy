@@ -1,0 +1,19 @@
+server {
+
+  listen 80;
+  listen 5601;
+  server_name kibana.restlastic.com;
+  access_log /var/log/nginx/kibana_proxy.log;
+  charset utf-8;
+
+  rewrite ^/$ /app/kibana permanent;
+
+
+  location / {
+    proxy_pass http://kibana:5601;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  }
+
+}

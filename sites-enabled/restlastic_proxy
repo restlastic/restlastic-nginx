@@ -1,0 +1,43 @@
+server {
+
+  listen 80;
+  listen 1337;
+  server_name api.restlastic.com;
+  server_name www.restlastic.com;
+  access_log /var/log/nginx/restlastic_api.log;
+  charset utf-8;
+
+  add_header X-tagline "You Know, for API";
+
+  gzip on;
+  gzip_disable "msie6";
+
+  gzip_comp_level 6;
+  gzip_min_length 1100;
+  gzip_buffers 16 8k;
+  gzip_proxied any;
+  gzip_types
+    text/plain
+    text/css
+    text/js
+    text/xml
+    text/javascript
+    application/javascript
+    application/x-javascript
+    application/json
+    application/xml
+    application/xml+rss;
+
+
+  location /public {
+    alias /src/app/public;
+  }
+
+  location / {
+    proxy_pass http://restlastic:1337;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  }
+
+}
